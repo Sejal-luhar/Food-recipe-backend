@@ -44,32 +44,6 @@ router.get('/logout', (req, res) => {
   });
 });
 
-// Get Current User Profile (Authenticated)
-// router.get('/profile', async (req, res) => {
-//   if (req.isAuthenticated()) {
-//     try {
-//       const user = await User.findById(req.user._id)
-//         .populate('recipes'); // Make sure the 'recipes' field is populated correctly
-
-//       if (!user) {
-//         return res.status(404).json({ message: 'User not found' });
-//       }
-
-//       res.json({
-//         user: {
-//           id: user._id,
-//           username: user.username,
-//           email: user.email,
-//           recipes: user.recipes || [], // Ensure this is populated
-//         },
-//       });
-//     } catch (err) {
-//       res.status(500).json({ message: 'Error fetching user profile', error: err.message });
-//     }
-//   } else {
-//     res.status(401).json({ message: 'Unauthorized' });
-//   }
-// });
 // router.get('/profile', async (req, res) => {
 //   // Check if the user is authenticated
 //   if (!req.isAuthenticated()) {
@@ -101,35 +75,30 @@ router.get('/logout', (req, res) => {
 //   }
 // });
 router.get('/profile', async (req, res) => {
-  // Check if the user is authenticated
   if (!req.isAuthenticated()) {
     return res.status(401).json({ message: 'Unauthorized' });
   }
 
   try {
-    // Fetch user and populate the recipes field
     const user = await User.findById(req.user._id).populate('recipes');
-
-    // Check if the user exists
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    // Respond with the user data
     res.status(200).json({
       user: {
         id: user._id,
         username: user.username,
         email: user.email,
-        name: user.name || '', // Ensure `name` has a fallback
-        recipes: user.recipes || [], // Return populated recipes
+        name: user.name || '',
+        recipes: user.recipes || [],
       },
     });
   } catch (err) {
-    // Handle server errors
     res.status(500).json({ message: 'Error fetching user profile', error: err.message });
   }
 });
+
 
 
 
