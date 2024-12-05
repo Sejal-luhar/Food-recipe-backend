@@ -28,6 +28,7 @@ app.use(
     secret: 'bahut secret',
     resave: false,
     saveUninitialized: false,
+    cookie: { secure: false, maxAge: 60 * 60 * 1000 },
   })
 );
 
