@@ -20,7 +20,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 app.use(cors({
-  origin: true,
+  origin: 'https://online-learning-frontend-alpha.vercel.app',
   credentials: true
 }));
 app.use(
