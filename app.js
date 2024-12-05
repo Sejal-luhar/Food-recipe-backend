@@ -23,16 +23,15 @@ app.use(cors({
   origin: 'https://food-recipe-frontend-ten.vercel.app',
   credentials: true
 }));
-app.use(
-  session({
-    secret: 'bahut secret',
-    resave: false,
-    saveUninitialized: false,
-  })
-);
-
+app.use(session({
+  secret: 'bahut secret',
+  resave: false,
+  saveUninitialized: false,
+  cookie: { secure: true } // Change to true if using HTTPS
+}));
 app.use(passport.initialize());
 app.use(passport.session());
+
 
 // Passport local strategy
 passport.use(User.createStrategy());

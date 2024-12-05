@@ -22,9 +22,11 @@ router.post('/register', async (req, res) => {
 
 // Login User
 router.post('/login', passport.authenticate('local', {
+  successRedirect: '/profile', // Redirect on successful login
   failureRedirect: '/login', // Redirect on failure
-  failureFlash: true // Allows flash messages if you have set up `connect-flash`
+  failureFlash: true
 }), (req, res) => {
+  console.log('User authenticated:', req.user);
   res.status(200).json({
     message: 'Logged in successfully',
     user: {
@@ -35,6 +37,7 @@ router.post('/login', passport.authenticate('local', {
     },
   });
 });
+
 
 // Logout User
 router.get('/logout', (req, res) => {
@@ -53,9 +56,7 @@ router.get('/profile', async (req, res) => {
   }
 
   try {
-    // Fetch user and populate the recipes field
     const user = await User.findById(req.user._id).populate('recipes');
-
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
@@ -73,5 +74,6 @@ router.get('/profile', async (req, res) => {
     res.status(500).json({ message: 'Error fetching user profile', error: err.message });
   }
 });
+
 
 module.exports = router;
