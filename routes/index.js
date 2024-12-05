@@ -80,12 +80,15 @@ router.get('/profile', async (req, res) => {
   }
 
   try {
+    // Log user details for debugging
+    console.log('Authenticated user:', req.user);
+
     const user = await User.findById(req.user._id).select('-password');
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
-    res.status(200).json({ user });
 
+    // Send a single response with the user data
     res.status(200).json({
       user: {
         id: user._id,
@@ -96,9 +99,11 @@ router.get('/profile', async (req, res) => {
       },
     });
   } catch (err) {
+    console.error('Error fetching user profile:', err.message);
     res.status(500).json({ message: 'Error fetching user profile', error: err.message });
   }
 });
+
 
 
 
