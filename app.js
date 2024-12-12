@@ -19,10 +19,24 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-app.use(cors({
-  origin: 'https://food-recipe-frontend-ten.vercel.app',
-  credentials: true
-}));
+const allowedOrigins = [
+  'https://food-recipe-frontend-ten.vercel.app',
+  'http://localhost:5173',
+];
+
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true); // Allow access
+    } else {
+      callback(new Error('Not allowed by CORS')); // Deny access
+    }
+  },
+  credentials: true, // Allow cookies and credentials
+};
+
+app.use(cors(corsOptions));
+
 app.use(
   session({
     secret: 'bahut secret',

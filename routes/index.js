@@ -24,16 +24,38 @@ router.post('/register', async (req, res) => {
 
 
 // Login User
-router.post('/login', passport.authenticate('local'), (req, res) => {
-  res.status(200).json({
-    message: 'Logged in successfully',
-    user: {
-      id: req.user._id,
-      username: req.user.username,
-      email: req.user.email,
-      name: req.user.name,
-    },
-  });
+router.post('/login', (req, res, next) => {
+  console.log('Received login data:', req.body);
+
+  passport.authenticate('local', (err, user, info) => {
+    if (err) {
+      console.error('Passport error:', err);
+      return res.status(500).json({ message: 'Server error', error: err.message });
+    }
+
+    if (!user) {
+      console.error('Authentication failed:', info);
+      return res.status(400).json({ message: info?.message || 'Invalid email or password' });
+    }
+
+    req.logIn(user, (loginErr) => {
+      if (loginErr) {
+        console.error('Login error:', loginErr);
+        return res.status(500).json({ message: 'Error logging in', error: loginErr.message });
+      }
+
+      console.log('Login successful:', user);
+      res.status(200).json({
+        message: 'Login successful',
+        user: {
+          id: user._id,
+          username:user.username,
+          email:user.email,
+          name:user.name,
+        },
+      });
+    });
+  })(req, res, next);
 });
 
 // Logout User
