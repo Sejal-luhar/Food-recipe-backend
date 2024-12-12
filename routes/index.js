@@ -97,7 +97,9 @@ router.get('/logout', (req, res) => {
 //   }
 // });
 router.get('/profile', async (req, res) => {
+  console.log("profile page");
   if (!req.isAuthenticated()) {
+   
     return res.status(401).json({ message: 'Unauthorized' });
   }
 
@@ -125,9 +127,6 @@ router.get('/profile', async (req, res) => {
     res.status(500).json({ message: 'Error fetching user profile', error: err.message });
   }
 });
-
-
-
 
 
 module.exports = router;
