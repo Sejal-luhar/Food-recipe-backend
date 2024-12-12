@@ -97,9 +97,9 @@ router.get('/logout', (req, res) => {
 //   }
 // });
 router.get('/profile', async (req, res) => {
-  console.log("profile page");
+  
   if (!req.isAuthenticated()) {
-   
+    console.log("profile page");
     return res.status(401).json({ message: 'Unauthorized' });
   }
 
